@@ -77,6 +77,7 @@ template<class INDEX, class PERSON> class map_template
 
 	PERSON* Find(INDEX index)
 	{
+		
 		node *temp = head;
 		while(temp != NULL)
 		{
@@ -85,8 +86,7 @@ template<class INDEX, class PERSON> class map_template
 				return &(temp->sub_person);
 			}			
 			temp = temp->next;
-		}
-
+		}	
 	}
 
 	friend ostream & operator<< (ostream & s, const  map_template &v)

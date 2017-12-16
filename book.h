@@ -7,12 +7,54 @@
 #include <malloc.h>
 #include <iostream>
 using namespace std;
-
+		enum dostepnosc 
+		{
+			na_polce = true,
+			wyporzyczona = false
+		};
 class book
 {
-	typedef unsigned int ID; 							//Identification number of Employee
-	map_template<ID,Employee> Database;					//Database of employees
 
-}
+	public:
+
+		char* imie;
+		char* nazwisko;
+		char* kategoria;
+		int liczba;
+		dostepnosc status;
+	book (const char *i, const char *n, const char *k, int l, dostepnosc s)
+	{
+		imie = new char[strlen (i) + 1];	
+		strcpy(imie, i);
+		nazwisko = new char[strlen (n) + 1];
+		strcpy(nazwisko, n);
+		kategoria = new char[strlen (k) + 1];
+		strcpy(kategoria, n);
+		liczba = l;
+		status = s;
+	};
+
+	book (const book & temp)
+	{
+		imie = new char[strlen (temp.imie) + 1];	
+		strcpy(imie, temp.imie);
+		nazwisko = new char[strlen (temp.nazwisko) + 1];
+		strcpy(nazwisko, temp.nazwisko);
+		kategoria = new char[strlen (temp.kategoria) + 1];
+		strcpy(kategoria, temp.kategoria);
+		liczba = temp.liczba;
+		status = temp.status;
+	};
+
+	~book()
+	{
+		delete [] imie;
+		delete [] nazwisko;
+		delete [] kategoria;
+	}	
+
+					
+
+};
 
 #endif /* __BOOK_H__ */

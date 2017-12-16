@@ -14,10 +14,10 @@ template<class INDEX, class PERSON> class map_template
 	struct node
 	{
 		node *next;
-		unsigned int ID;
+		INDEX ID;
 		PERSON sub_person;
 
-		node(unsigned int index, PERSON pperson): sub_person(pperson)
+		node(INDEX index, PERSON pperson): sub_person(pperson)
 		{
 			next = NULL;
 			ID = index;
@@ -78,15 +78,17 @@ template<class INDEX, class PERSON> class map_template
 	PERSON* Find(INDEX index)
 	{
 		node *temp = head;
+		PERSON *tempp;
 		while(temp != NULL)
 		{
 			if(temp->ID == index)
 			{			
-				return &(temp->sub_person);
+				tempp = &(temp->sub_person);
 			}			
 			temp = temp->next;
 		}
-
+	
+		return tempp;
 	}
 
 	friend ostream & operator<< (ostream & s, const  map_template &v)

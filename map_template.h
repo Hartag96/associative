@@ -9,15 +9,16 @@
 using namespace std;
 
 
-template<class INDEX, class PERSON> class map_template
-{
+template<class INDEX, class DATA> class map_template
+{	
+	class KeyNoExist{};
 	struct node
 	{
 		node *next;
 		INDEX ID;
-		PERSON sub_person;
+		DATA sub_data;
 
-		node(INDEX index, PERSON pperson): sub_person(pperson)
+		node(INDEX index, DATA _data): sub_data(_data)
 		{
 			next = NULL;
 			ID = index;
@@ -32,6 +33,40 @@ template<class INDEX, class PERSON> class map_template
 	map_template()
 	{
 		head = NULL;
+	}
+	
+	map_template(const map_template &v)
+	{
+		
+		node *temp_copy = v.head;	
+		node *temp_new = NULL;
+		try
+		{	
+			while(temp_copy != NULL)
+			{
+				if(head == NULL)
+				{
+					head = new node(temp_copy->ID, temp_copy->sub_data);
+					temp_new = head;
+				}
+				else
+				{
+					temp_new->next = new node(temp_copy->ID, temp_copy->sub_data);
+					temp_new = temp_new->next;			
+				}
+	
+				temp_copy = temp_copy->next;	
+			}
+		}catch(bad_alloc&)
+		{
+			while(head)
+			{
+				node *temp_delete = head->next;
+				delete head;
+				head = temp_delete;
+			}
+		}
+		
 	}
 
 	~map_template()
@@ -48,47 +83,49 @@ template<class INDEX, class PERSON> class map_template
 	{
 		if (&v == this)
 			return *this;
-		node *temp = v.head;	
-		node *temp_local = NULL;	
+	
+		map_template temp(v);
 		
-		while(temp != NULL)
-		{
-		if(head == NULL)
-		{ 
-			head = temp;
-			temp_local = head;
-		}		
-		else
-		{
-			temp_local->next = temp;
-			temp_local = temp_local->next;
-		}
-				temp = temp->next; 		
-		}
+		node *k = head;
+		head = temp.head;
+		temp.head = k;
 		return *this;
 	}
 
-	void Add(INDEX index, PERSON  person)
+	void Add(INDEX index, DATA  data)
 	{	
-		node *nowy = new node(index, person);
-		nowy->next = head;
-		head = nowy;	
+		node *new_node = NULL;
+		try
+		{
+			new_node = new node(index, data);
+			new_node->next = head;
+			head = new_node;
+		}
+		catch(bad_alloc&)
+		{
+			cout << "Nie udalo sie dodac nowego elementu" << endl;
+			delete new_node;
+			throw;
+		}	
 	}
 
-	PERSON* Find(INDEX index)
+	DATA* Find(INDEX index)
 	{
 		node *temp = head;
-		PERSON *tempp;
+		DATA *temp_data = NULL;
 		while(temp != NULL)
 		{
 			if(temp->ID == index)
 			{			
-				tempp = &(temp->sub_person);
+				temp_data = &(temp->sub_data);
 			}			
 			temp = temp->next;
 		}
-	
-		return tempp;
+		if(temp_data == NULL){
+			cout << "Nie znaleziono takiego klucza" <<endl;
+			throw KeyNoExist();
+		}
+		return temp_data;
 	}
 
 	friend ostream & operator<< (ostream & s, const  map_template &v)

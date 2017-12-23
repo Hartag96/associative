@@ -14,15 +14,9 @@ template<class INDEX, class DATA> class map_template
 	class KeyNoExist{};
 	struct node
 	{
-		node *next;
+		node *next = NULL;
 		INDEX ID;
-		DATA sub_data;
-
-		node(INDEX index, DATA _data): sub_data(_data)
-		{
-			next = NULL;
-			ID = index;
-		}
+		DATA *data;
 	};
 	
 	node *head = NULL;
@@ -40,21 +34,28 @@ template<class INDEX, class DATA> class map_template
 		
 		node *temp_copy = v.head;	
 		node *temp_new = NULL;
+		node *temp_prev = NULL;
 		try
 		{	
 			while(temp_copy != NULL)
 			{
+				temp_new = new node;
+				temp_new->ID = temp_copy->ID;
+				temp_new->data = temp_copy->data;
+				
 				if(head == NULL)
 				{
-					head = new node(temp_copy->ID, temp_copy->sub_data);
-					temp_new = head;
+					head = temp_new;                      	// inicjacja poczateku listy 
+					temp_prev = temp_new;
+					
 				}
 				else
-				{
-					temp_new->next = new node(temp_copy->ID, temp_copy->sub_data);
-					temp_new = temp_new->next;			
+				{	
+					temp_prev->next = temp_new;
+					temp_prev = temp_new;			
 				}
-	
+
+				temp_new = temp_new->next;
 				temp_copy = temp_copy->next;	
 			}
 		}catch(bad_alloc&)
@@ -92,13 +93,15 @@ template<class INDEX, class DATA> class map_template
 		return *this;
 	}
 
-	void Add(INDEX index, DATA  data)
+	void Add(INDEX _index, DATA  _data)
 	{	
 		node *new_node = NULL;
 		try
 		{
-			new_node = new node(index, data);
+			new_node = new node;
 			new_node->next = head;
+			new_node->ID = _index;
+			new_node->data = &(_data);
 			head = new_node;
 		}
 		catch(bad_alloc&)
@@ -117,7 +120,7 @@ template<class INDEX, class DATA> class map_template
 		{
 			if(temp->ID == index)
 			{			
-				temp_data = &(temp->sub_data);
+				temp_data = temp->data;
 			}			
 			temp = temp->next;
 		}

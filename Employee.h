@@ -11,43 +11,16 @@ using namespace std;
 class Employee
 {
   public:
-	char* Name;
-	char* Position;
+	string Name;
+	string Position;
 	int Age;
-	Employee (const char *n, const char *p, int a)
-	{
-		Name = new char[strlen (n) + 1];	
-		strcpy(Name, n);
-		Position = new char[strlen (p) + 1];
-		strcpy(Position, p);
-		Age = a;
-	};
-	Employee (const Employee & temp)
-	{
-		Name = new char[strlen (temp.Name) + 1];	
-		strcpy(Name, temp.Name);
-		Position = new char[strlen (temp.Position) + 1];
-		strcpy(Position, temp.Position);
-		Age = temp.Age;	
-	}
-	
-	Employee()
+	Employee (const char *_name, const char *_position, int _age)
 	{
 
+		Name = _name;
+		Position = _position;
+		Age = _age;
 	};
-	
-	~Employee ()
-	{
-		delete [] Name;
-		delete [] Position;	
-	};
-	
-	Employee &operator[] (const char *key)
-	{
-		return *this;
-	};
-
-
 	
 };
 
